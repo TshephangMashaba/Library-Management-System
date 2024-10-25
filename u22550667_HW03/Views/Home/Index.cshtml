@@ -1,61 +1,275 @@
 ﻿@model u22550667_HW03.Models.HomeViewModel
+@using PagedList.Mvc;
+@using PagedList;
 
 @{
     ViewBag.Title = "Home Page";
 }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Students.FirstOrDefault().name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Students.FirstOrDefault().surname)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Students.FirstOrDefault().birthdate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Students.FirstOrDefault().gender)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Students.FirstOrDefault().@class)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Students.FirstOrDefault().point)
-        </th>
-        <th></th>
-    </tr>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Students</h2>
 
-    @foreach (var students in Model.Students)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => students.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => students.surname)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => students.birthdate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => students.gender)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => students.@class)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => students.point)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = students.studentId }) |
-                @Html.ActionLink("Details", "Details", new { id = students.studentId }) |
-                @Html.ActionLink("Delete", "Delete", new { id = students.studentId })
-            </td>
-        </tr>
-    }
-</table>
+            <p>
+
+                <a class="create-link btn btn-outline-dark mb-3" data-url="@Url.Action("Create", "students")">Create</a>
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Students.FirstOrDefault().name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Students.FirstOrDefault().surname)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Students.FirstOrDefault().birthdate)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Students.FirstOrDefault().gender)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Students.FirstOrDefault().@class)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Students.FirstOrDefault().point)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var students in Model.Students)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => students.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => students.surname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => students.birthdate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => students.gender)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => students.@class)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => students.point)
+                        </td>
+                        <td>
+
+
+
+                            <a href="#" class="details-link btn btn-outline-info" data-url="@Url.Action("Details", "students",  new { id = students.studentId })">Details</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+
+        </div>
+        <div class="col-md-6">
+            <h2>Books</h2>
+
+            <p>
+                <a class="create-link btn btn-outline-dark mb-3" data-url="@Url.Action("Create", "books")">Create</a>
+            </p>
+            <table class="table">
+                <tr>
+                    <th class="text-nowrap">
+                        @Html.DisplayNameFor(model => model.Books.FirstOrDefault().name)
+                    </th>
+                    <th class="text-nowrap">
+                        @Html.DisplayNameFor(model => model.Books.FirstOrDefault().pagecount)
+                    </th>
+                    <th class="text-nowrap">
+                        @Html.DisplayNameFor(model => model.Books.FirstOrDefault().point)
+                    </th>
+                    <th class="text-nowrap">
+                        @Html.DisplayNameFor(model => model.Books.FirstOrDefault().author.name)
+                    </th>
+                    <th class="text-nowrap">
+                        @Html.DisplayNameFor(model => model.Books.FirstOrDefault().type.name)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var book in Model.Books)
+                {
+                    <tr>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => book.name)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => book.pagecount)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => book.point)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => book.author.name)
+                        </td>
+                        <td class="text-nowrap">
+                            @Html.DisplayFor(modelItem => book.type.name)
+                        </td>
+                        <td>
+                            <a href="#" class="details-link btn btn-outline-info" data-url="@Url.Action("Details", "books", new { id = book.bookId })">Details</a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="pagination">
+                @if (ViewBag.TotalStudentPages > 1)
+                {
+                    int maxPagesToShow = 10; // Maximum number of pages to display at once
+                    int currentPage = ViewBag.CurrentStudentPage;
+                    int totalPages = ViewBag.TotalStudentPages;
+
+                    // Calculate the start and end page numbers for pagination
+                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                    // Show "Previous" button if not on the first page
+                    if (currentPage > 1)
+                    {
+                        @Html.ActionLink("« Previous", "Index", new { page = currentPage - 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-outline-secondary" })
+                    }
+
+                    // Show individual page numbers
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == currentPage)
+                        {
+                            <strong class="btn btn-primary active">@i</strong> <!-- Current page -->
+                        }
+                        else
+                        {
+                            @Html.ActionLink(i.ToString(), "Index", new { page = i, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-outline-secondary" })
+                        }
+                    }
+
+                    // Show "Next" button if not on the last page
+                    if (currentPage < totalPages)
+                    {
+                        @Html.ActionLink("Next »", "Index", new { page = currentPage + 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-outline-secondary" })
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-6">
+
+            <!-- Pagination controls for Books -->
+            <div class="pagination">
+                @if (ViewBag.TotalBookPages > 1)
+                {
+                    int maxPagesToShow = 10; // Maximum number of pages to display at once
+                    int currentPage = ViewBag.CurrentBookPage;
+                    int totalPages = ViewBag.TotalBookPages;
+
+                    // Calculate the start and end page numbers for pagination
+                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                    // Show "Previous" button if not on the first page
+                    if (currentPage > 1)
+                    {
+                        @Html.ActionLink("« Previous", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage - 1 }, new { @class = "btn btn-outline-secondary" })
+                    }
+
+                    // Show individual page numbers
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == currentPage)
+                        {
+                            <strong class="btn btn-primary active">@i</strong> <!-- Current page -->
+                        }
+                        else
+                        {
+                            @Html.ActionLink(i.ToString(), "Index", new { page = ViewBag.CurrentStudentPage, bookPage = i }, new { @class = "btn btn-outline-secondary" })
+                        }
+                    }
+
+                    // Show "Next" button if not on the last page
+                    if (currentPage < totalPages)
+                    {
+                        @Html.ActionLink("Next »", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage + 1 }, new { @class = "btn btn-outline-secondary" })
+                    }
+                }
+            </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+            <div id="myModal" class="modal fade" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">To Do List</h5>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body" id="modal-content">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            @section Scripts {
+                <script>
+                    $(function () {
+                        // Function to handle Edit link click event in the Combined View and Details modal
+                        $(".edit-link, .edit-link-in-modal").click(function (e) {
+                            e.preventDefault();
+                            var url = $(this).data("url");
+
+                            $.get(url, function (data) {
+                                $("#modal-content").empty();
+                                $("#modal-content").html(data);
+                                $("#myModal").modal("show");
+                            });
+                        });
+
+                        // Function to handle form submission within the modal
+                        $("#modal-content").on("submit", "form", function (e) {
+                            e.preventDefault();
+                            var form = $(this);
+                            var url = form.attr("action");
+                            var formData = form.serialize();
+
+                            $.post(url, formData, function (data) {
+                                $("#myModal").modal("hide");
+                                location.reload();
+                            });
+                        });
+
+                        // Function to handle other links (details, delete, create) within the modal
+                        $(".details-link, .delete-link, .create-link, .create-lookup-link").click(function (e) {
+                            e.preventDefault();
+                            var url = $(this).data("url");
+
+                            $.get(url, function (data) {
+                                $("#modal-content").empty();
+                                $("#modal-content").html(data);
+                                $("#myModal").modal("show");
+                            });
+                        });
+                    });
+                </script>
+            }
