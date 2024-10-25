@@ -11,4 +11,13 @@ namespace u22550667_HW03.Models
 
         public List<book> Books { get; set; }   
     }
+
+    public class MaintainViewModel
+    {
+        public List<author> Author { get; set; }
+
+        public List<type> Type { get; set; }
+
+        public List<borrow> Borrow { get; set; }
+    }
 }

@@ -1,0 +1,309 @@
+﻿@model u22550667_HW03.Models.MaintainViewModel
+
+@{
+    ViewBag.Title = "Maintain";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+
+            <h2>Author</h2>
+
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+
+                        @Html.DisplayNameFor(model => model.Author.FirstOrDefault().name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Author.FirstOrDefault().surname)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var author in Model.Author)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => author.name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => author.surname)
+                        </td>
+                        <td>
+                            <a href="#" class="edit-link btn btn-outline-success" data-url="@Url.Action("Edit", "authors", new { id = author.authorId })">Edit</a>
+                            <a href="#" class="delete-link btn btn-outline-danger" data-url="@Url.Action("Delete", "authors", new { id = author.authorId })">Delete</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+        <div class="col-md-6">
+
+            <h2>Types</h2>
+
+            <p>
+                @Html.ActionLink("Create New", "Create")
+            </p>
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var type in Model.Type)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => type.name)
+                        </td>
+                        <td>
+                            <a href="#" class="edit-link btn btn-outline-success" data-url="@Url.Action("Edit", "types", new { id = type.typeId })">Edit</a>
+                            <a href="#" class="delete-link btn btn-outline-danger" data-url="@Url.Action("Delete", "types", new { id = type.typeId })">Delete</a>
+
+                        </td>
+                    </tr>
+                }
+
+            </table>
+
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+
+            <div class="pagination">
+                @if (ViewBag.TotalAuthorPages > 1)
+                {
+                    int maxPagesToShow = 10;
+                    int currentPage = ViewBag.CurrentAuthorPage;
+                    int totalPages = ViewBag.TotalAuthorPages;
+                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                    if (currentPage > 1)
+                    {
+                        @Html.ActionLink("« Previous", "Maintain", new { authorPage = currentPage - 1, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-outline-secondary" })
+                    }
+
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == currentPage)
+                        {
+                            <strong class="btn btn-primary active">@i</strong>
+                        }
+                        else
+                        {
+                            @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = i, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-outline-secondary" })
+                        }
+                    }
+
+                    if (currentPage < totalPages)
+                    {
+                        @Html.ActionLink("Next »", "Maintain", new { authorPage = currentPage + 1, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-outline-secondary" })
+                    }
+                }
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+
+            <div class="pagination">
+                @if (ViewBag.TotalTypePages > 1)
+                {
+                    int maxPagesToShow = 10;
+                    int currentPage = ViewBag.CurrentTypePage;
+                    int totalPages = ViewBag.TotalTypePages;
+                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                    if (currentPage > 1)
+                    {
+                        @Html.ActionLink("« Previous", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = currentPage - 1, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-outline-secondary" })
+                    }
+
+                    for (int i = startPage; i <= endPage; i++)
+                    {
+                        if (i == currentPage)
+                        {
+                            <strong class="btn btn-primary active">@i</strong>
+                        }
+                        else
+                        {
+                            @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = i, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-outline-secondary" })
+                        }
+                    }
+
+                    if (currentPage < totalPages)
+                    {
+                        @Html.ActionLink("Next »", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = currentPage + 1, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-outline-secondary" })
+                    }
+                }
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="container">
+    <div class="row">
+        <h2>Borrows</h2>
+
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Borrow.FirstOrDefault().takenDate)
+
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Borrow.FirstOrDefault().broughtDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Borrow.FirstOrDefault().book.name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Borrow.FirstOrDefault().student.name)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var borrow in Model.Borrow)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => borrow.takenDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => borrow.broughtDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => borrow.book.name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => borrow.student.name)
+                    </td>
+                    <td>
+                        <a href="#" class="edit-link btn btn-outline-success" data-url="@Url.Action("Edit", "borrows", new { id = borrow.borrowId })">Edit</a>
+                        <a href="#" class="delete-link btn btn-outline-danger" data-url="@Url.Action("Delete", "borrows", new { id = borrow.borrowId })">Delete</a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </div>
+</div>
+<!-- Pagination controls for Borrows -->
+<div class="pagination">
+    @if (ViewBag.TotalBorrowPages > 1)
+    {
+        int maxPagesToShow = 10;
+        int currentPage = ViewBag.CurrentBorrowPage;
+        int totalPages = ViewBag.TotalBorrowPages;
+        int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+        int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+        startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+        if (currentPage > 1)
+        {
+            @Html.ActionLink("« Previous", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = currentPage - 1 }, new { @class = "btn btn-outline-secondary" })
+        }
+
+        for (int i = startPage; i <= endPage; i++)
+        {
+            if (i == currentPage)
+            {
+                <strong class="btn btn-primary active">@i</strong>
+            }
+            else
+            {
+                @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = i }, new { @class = "btn btn-outline-secondary" })
+            }
+        }
+
+        if (currentPage < totalPages)
+        {
+            @Html.ActionLink("Next »", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = currentPage + 1 }, new { @class = "btn btn-outline-secondary" })
+        }
+    }
+</div>
+
+<div id="myModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal Title</h5> <!-- Optional: Add a title for clarity -->
+                <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close">x</button>
+            </div>
+            <div class="modal-body" id="modal-content">
+                <!-- Your modal content goes here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Function to handle Edit link click event in the Combined View and Details modal
+            $(".edit-link, .edit-link-in-modal").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#modal-content").empty();
+                    $("#modal-content").html(data);
+                    $("#myModal").modal("show");
+                });
+            });
+
+            // Function to handle form submission within the modal
+            $("#modal-content").on("submit", "form", function (e) {
+                e.preventDefault();
+                var form = $(this);
+                var url = form.attr("action");
+                var formData = form.serialize();
+
+                $.post(url, formData, function (data) {
+                    $("#myModal").modal("hide");
+                    location.reload();
+                });
+            });
+
+            // Function to handle other links (details, delete, create) within the modal
+            $(".details-link, .delete-link, .create-link, .create-lookup-link").click(function (e) {
+                e.preventDefault();
+                var url = $(this).data("url");
+
+                $.get(url, function (data) {
+                    $("#modal-content").empty();
+                    $("#modal-content").html(data);
+                    $("#myModal").modal("show");
+                });
+            });
+        });
+    </script>
+}

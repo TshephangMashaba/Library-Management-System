@@ -19,8 +19,7 @@ namespace u22550667_HW03.Controllers
         // Define the number of elements per page
         int numberElementsPerPage = 10;
 
-        // GET: students and books
-        // GET: students
+     
         public async Task<ActionResult> Index(int? page, int? bookPage)
         {
             // Determine the current page number for students and books, defaulting to 1 if null
@@ -73,11 +72,71 @@ namespace u22550667_HW03.Controllers
 
 
 
-        public ActionResult Maintain()
+        public async Task<ActionResult> Maintain(int? authorPage, int? typePage, int? borrowPage)
         {
-            
-            return View();
+            // Determine the current page numbers for authors, types, and borrows, defaulting to 1 if null
+            int authorPageNumber = authorPage ?? 1;
+            int typePageNumber = typePage ?? 1;
+            int borrowPageNumber = borrowPage ?? 1;
+
+            // Get all authors, types, and borrows as IQueryable to support pagination
+            var authorsQuery = db.authors.AsQueryable();
+            var typesQuery = db.types.AsQueryable();
+            var borrowsQuery = db.borrows.AsQueryable();
+
+            // Define the number of elements per page
+            int numberElementsPerPage = 10;
+
+            // Get the total count of authors, types, and borrows
+            int totalAuthorCount = await authorsQuery.CountAsync();
+            int totalTypeCount = await typesQuery.CountAsync();
+            int totalBorrowCount = await borrowsQuery.CountAsync();
+
+            // Create a paginated list of authors
+            var authors = await authorsQuery
+                .OrderBy(a => a.authorId)
+                .Skip((authorPageNumber - 1) * numberElementsPerPage)
+                .Take(numberElementsPerPage)
+                .ToListAsync();
+
+            // Create a paginated list of types
+            var types = await typesQuery
+                .OrderBy(t => t.typeId)
+                .Skip((typePageNumber - 1) * numberElementsPerPage)
+                .Take(numberElementsPerPage)
+                .ToListAsync();
+
+            // Create a paginated list of borrows
+            var borrows = await borrowsQuery
+                .OrderBy(b => b.borrowId)
+                .Skip((borrowPageNumber - 1) * numberElementsPerPage)
+                .Take(numberElementsPerPage)
+                .ToListAsync();
+
+            // Create the view model
+            var viewModel = new MaintainViewModel
+            {
+                Author = authors,
+                Type = types,
+                Borrow = borrows
+            };
+
+            // Pass the total count and current page numbers to the view
+            ViewBag.TotalAuthorCount = totalAuthorCount;
+            ViewBag.CurrentAuthorPage = authorPageNumber;
+            ViewBag.TotalAuthorPages = (int)Math.Ceiling((double)totalAuthorCount / numberElementsPerPage);
+
+            ViewBag.TotalTypeCount = totalTypeCount;
+            ViewBag.CurrentTypePage = typePageNumber;
+            ViewBag.TotalTypePages = (int)Math.Ceiling((double)totalTypeCount / numberElementsPerPage);
+
+            ViewBag.TotalBorrowCount = totalBorrowCount;
+            ViewBag.CurrentBorrowPage = borrowPageNumber;
+            ViewBag.TotalBorrowPages = (int)Math.Ceiling((double)totalBorrowCount / numberElementsPerPage);
+
+            return View(viewModel);
         }
+
 
         public ActionResult Report()
         {
