@@ -138,6 +138,7 @@
     <Compile Include="Models\borrow.cs">
       <DependentUpon>LibraryDataEntities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\LibraryDataEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

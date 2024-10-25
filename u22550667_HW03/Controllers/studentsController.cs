@@ -53,7 +53,7 @@ namespace u22550667_HW03.Controllers
             {
                 db.students.Add(student);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(student);
@@ -85,7 +85,7 @@ namespace u22550667_HW03.Controllers
             {
                 db.Entry(student).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View(student);
         }
@@ -113,7 +113,7 @@ namespace u22550667_HW03.Controllers
             student student = await db.students.FindAsync(id);
             db.students.Remove(student);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)

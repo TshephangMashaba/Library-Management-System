@@ -113,7 +113,7 @@ namespace u22550667_HW03
             author author = await db.authors.FindAsync(id);
             db.authors.Remove(author);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)

@@ -56,7 +56,7 @@ namespace u22550667_HW03.Controllers
             {
                 db.borrows.Add(borrow);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             ViewBag.bookId = new SelectList(db.books, "bookId", "name", borrow.bookId);
@@ -92,7 +92,7 @@ namespace u22550667_HW03.Controllers
             {
                 db.Entry(borrow).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             ViewBag.bookId = new SelectList(db.books, "bookId", "name", borrow.bookId);
             ViewBag.studentId = new SelectList(db.students, "studentId", "name", borrow.studentId);
@@ -122,7 +122,7 @@ namespace u22550667_HW03.Controllers
             borrow borrow = await db.borrows.FindAsync(id);
             db.borrows.Remove(borrow);
             await db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         protected override void Dispose(bool disposing)
