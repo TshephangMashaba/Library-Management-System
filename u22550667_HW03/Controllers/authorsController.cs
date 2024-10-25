@@ -53,7 +53,7 @@ namespace u22550667_HW03
             {
                 db.authors.Add(author);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(author);
@@ -85,7 +85,7 @@ namespace u22550667_HW03
             {
                 db.Entry(author).State = EntityState.Modified;
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View(author);
         }
