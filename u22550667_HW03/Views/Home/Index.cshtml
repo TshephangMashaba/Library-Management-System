@@ -5,129 +5,95 @@
 @{
     ViewBag.Title = "Home Page";
 }
-<div class="container-fluid p-0">
-    <div class="row no-gutters">
-        <!-- Remove gutters between columns -->
-        <div class="col-md-6">
-            <h2>Students</h2>
-
-            <p>
-
-                <a class="create-link btn btn-outline-dark mb-3" data-url="@Url.Action("Create", "students")">Create</a>
-            </p>
-            <table class="table">
-                <tr>
-                    <th class="text-nowrap">
-                        Student  Name
-                    </th>
-                    <th class="text-nowrap">
-                        Student Surname
-                    </th>
-                    <th class="text-nowrap">
-                        Birth Date
-                    </th>
-                    <th class="text-nowrap">
-                        Gender
-                    </th>
-                    <th class="text-nowrap">
-                        Class
-                    </th>
-                    <th class="text-nowrap">
-                        Point
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var students in Model.Students)
-                {
-                    <tr>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => students.name)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => students.surname)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => students.birthdate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => students.gender)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => students.@class)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => students.point)
-                        </td>
-                        <td>
-                            <a href="#" class="details-link btn btn-outline-info" data-url="@Url.Action("Details", "students",  new { id = students.studentId })">Details</a>
-                        </td>
-                    </tr>
-                }
-            </table>
-
-
+<main>
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Students Section -->
+            <div class="col-12 col-md-6 vh-100 overflow-auto">
+                <!-- Full-height column -->
+                <h2 class="p-3 m-0 text-danger">Students</h2>
+                <div class="p-3">
+                    <a class="create-link btn btn-dark mb-3" data-url="@Url.Action("Create", "students")">Create</a>
+                    <div class="table-responsive bg-dark text-white p-3 rounded">
+                        <table class="table table-dark w-100">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>Birth Date</th>
+                                    <th>Gender</th>
+                                    <th>Class</th>
+                                    <th>Point</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var students in Model.Students)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => students.name)</td>
+                                        <td>@Html.DisplayFor(modelItem => students.surname)</td>
+                                        <td>@Html.DisplayFor(modelItem => students.birthdate)</td>
+                                        <td>@Html.DisplayFor(modelItem => students.gender)</td>
+                                        <td>@Html.DisplayFor(modelItem => students.@class)</td>
+                                        <td>@Html.DisplayFor(modelItem => students.point)</td>
+                                        <td>
+                                            <a href="#" class="details-link btn btn-danger" data-url="@Url.Action("Details", "students", new { id = students.studentId })">Details</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Books Section -->
+            <div class="col-12 col-md-6 vh-100">
+                <!-- Full-height column -->
+                <h2 class="text-danger p-3 m-0">Books</h2>
+                <div class="p-3">
+                    <a class="create-link btn btn-dark mb-3" data-url="@Url.Action("Create", "books")">Create</a>
+                    <div class="table-responsive bg-dark text-white p-3 rounded">
+                        <table class="table table-dark w-100">
+                            <thead>
+                                <tr>
+                                    <th>Book Name</th>
+                                    <th>Page Count</th>
+                                    <th>Point</th>
+                                    <th>Author Name</th>
+                                    <th>Book Type</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var book in Model.Books)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => book.name)</td>
+                                        <td>@Html.DisplayFor(modelItem => book.pagecount)</td>
+                                        <td>@Html.DisplayFor(modelItem => book.point)</td>
+                                        <td>@Html.DisplayFor(modelItem => book.author.name)</td>
+                                        <td>@Html.DisplayFor(modelItem => book.type.name)</td>
+                                        <td>
+                                            <a href="#" class="details-link btn btn-danger" data-url="@Url.Action("Details", "books", new { id = book.bookId })">Details</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <h2>Books</h2>
-
-            <p>
-                <a class="create-link btn btn-outline-dark mb-3" data-url="@Url.Action("Create", "books")">Create</a>
-            </p>
-            <table class="table">
-                <tr>
-                    <th class="text-nowrap">
-                        Book Name
-                    </th>
-                    <th class="text-nowrap">
-                        Page Count
-                    </th>
-                    <th class="text-nowrap">
-                        Point
-                    </th>
-                    <th class="text-nowrap">
-                        Author Name
-                    </th>
-                    <th class="text-nowrap">
-                        Book Type
-                    </th>
-                    <th></th>
-                </tr>
-
-                @foreach (var book in Model.Books)
-                {
-                    <tr>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => book.name)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => book.pagecount)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => book.point)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => book.author.name)
-                        </td>
-                        <td class="text-nowrap">
-                            @Html.DisplayFor(modelItem => book.type.name)
-                        </td>
-                        <td>
-                            <a href="#" class="details-link btn btn-outline-info" data-url="@Url.Action("Details", "books", new { id = book.bookId })">Details</a>
-                        </td>
-                    </tr>
-                }
-            </table>
-        </div>
-
     </div>
-</div>
+
+    <!--Pagination section-->
 
     <div class="container">
         <div class="row">
             <div class="col-md-6">
 
-                <div class="pagination">
+                <div class="pagination-lg ">
                     @if (ViewBag.TotalStudentPages > 1)
                     {
                         int maxPagesToShow = 10; // Maximum number of pages to display at once
@@ -142,7 +108,7 @@
                         // Show "Previous" button if not on the first page
                         if (currentPage > 1)
                         {
-                            @Html.ActionLink("« Previous", "Index", new { page = currentPage - 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-outline-secondary" })
+                            @Html.ActionLink("« Previous", "Index", new { page = currentPage - 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
                         }
 
                         // Show individual page numbers
@@ -150,18 +116,18 @@
                         {
                             if (i == currentPage)
                             {
-                                <strong class="btn btn-primary active">@i</strong> <!-- Current page -->
+                                <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
                             }
                             else
                             {
-                                @Html.ActionLink(i.ToString(), "Index", new { page = i, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-outline-secondary" })
+                                @Html.ActionLink(i.ToString(), "Index", new { page = i, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
                             }
                         }
 
                         // Show "Next" button if not on the last page
                         if (currentPage < totalPages)
                         {
-                            @Html.ActionLink("Next »", "Index", new { page = currentPage + 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-outline-secondary" })
+                            @Html.ActionLink("Next »", "Index", new { page = currentPage + 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
                         }
                     }
                 </div>
@@ -169,7 +135,7 @@
             <div class="col-md-6">
 
                 <!-- Pagination controls for Books -->
-                <div class="pagination">
+                <div class="pagination-lg">
                     @if (ViewBag.TotalBookPages > 1)
                     {
                         int maxPagesToShow = 10; // Maximum number of pages to display at once
@@ -184,7 +150,7 @@
                         // Show "Previous" button if not on the first page
                         if (currentPage > 1)
                         {
-                            @Html.ActionLink("« Previous", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage - 1 }, new { @class = "btn btn-outline-secondary" })
+                            @Html.ActionLink("« Previous", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage - 1 }, new { @class = "btn btn-dark" })
                         }
 
                         // Show individual page numbers
@@ -192,18 +158,18 @@
                         {
                             if (i == currentPage)
                             {
-                                <strong class="btn btn-primary active">@i</strong> <!-- Current page -->
+                                <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
                             }
                             else
                             {
-                                @Html.ActionLink(i.ToString(), "Index", new { page = ViewBag.CurrentStudentPage, bookPage = i }, new { @class = "btn btn-outline-secondary" })
+                                @Html.ActionLink(i.ToString(), "Index", new { page = ViewBag.CurrentStudentPage, bookPage = i }, new { @class = "btn btn-dark" })
                             }
                         }
 
                         // Show "Next" button if not on the last page
                         if (currentPage < totalPages)
                         {
-                            @Html.ActionLink("Next »", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage + 1 }, new { @class = "btn btn-outline-secondary" })
+                            @Html.ActionLink("Next »", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage + 1 }, new { @class = "btn btn-dark" })
                         }
                     }
                 </div>
@@ -211,24 +177,27 @@
             </div>
         </div>
     </div>
-</div>
 
-<div id="myModal" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Modal Title</h5> <!-- Optional: Add a title for clarity -->
-                <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close">x</button>
-            </div>
-            <div class="modal-body" id="modal-content">
-                <!-- Your modal content goes here -->
+
+    <div id="myModal" class="modal fade" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#">
+                        <img src="~/Images/Library Management System.png" alt="Logo" style="height: 100px;" />
+                    </a>
+                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <div class="modal-body" id="modal-content">
+                    <!-- Your modal content goes here -->
+                </div>
             </div>
         </div>
     </div>
-</div>
 
+    <
 
-
+</main>
 
 
 @section Scripts {
