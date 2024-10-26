@@ -1,0 +1,338 @@
+﻿@model u22550667_HW03.Models.ReportViewModel
+
+@{
+    ViewBag.Title = "Report";
+}
+<!-- Include Rich Text Editor Library -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<h2>Report</h2>
+<div>
+    <h3>Student Borrowing Ranking</h3>
+    <canvas id="studentBorrowingChart"></canvas>
+    <br />
+    <h3>Student Borrowing Ranking Table</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Student ID</th>
+                <th>Student Name</th> <!-- Added header for Student Name -->
+                <th>Books Borrowed</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ranking in Model.BorrowingRanking)
+            {
+                <tr>
+                    <td>@ranking.StudentId</td>
+                    <td>@ranking.StudentName</td> <!-- Display the Student Name -->
+                    <td>@ranking.BookCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <h3>Borrowing Frequency</h3>
+    <canvas id="borrowingFrequencyChart"></canvas>
+</div>
+
+
+<div>
+    <h3>Popular Books</h3>
+    <canvas id="popularBooksChart"></canvas>
+</div>
+
+<!-- Form to Save Report -->
+<div>
+    <h3>Save Report</h3>
+    <form id="saveReportForm">
+        <input type="text" id="filename" placeholder="Filename" required />
+        <select id="fileType">
+            <option value="pdf">PDF</option>
+            <option value="excel">Excel</option>
+        </select>
+        <button type="submit">Save Report</button>
+    </form>
+</div>
+
+<!-- Document Archive Section -->
+<div>
+    <h3>Document Archive</h3>
+    <ul id="documentArchive">
+        <!-- This list will be populated by JavaScript -->
+    </ul>
+</div>
+
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+
+    <script>
+        // Parse the data from ViewBag
+        var popularBooksData = @Html.Raw(ViewBag.PopularBooksData);
+        var borrowingFrequencyData = @Html.Raw(ViewBag.BorrowingFrequencyData);
+        var studentBorrowingData = @Html.Raw(ViewBag.StudentBorrowingData);
+
+        // Render Student Borrowing Ranking Bar Chart
+        var studentBorrowingCtx = document.getElementById('studentBorrowingChart').getContext('2d');
+        var studentBorrowingChart = new Chart(studentBorrowingCtx, {
+            type: 'bar',
+            data: {
+                labels: studentBorrowingData.map(x => x.StudentName),
+                datasets: [{
+                    label: 'Books Borrowed',
+                    data: studentBorrowingData.map(x => x.BookCount),
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Render Borrowing Frequency Line Chart
+        var borrowingFrequencyCtx = document.getElementById('borrowingFrequencyChart').getContext('2d');
+        var borrowingFrequencyChart = new Chart(borrowingFrequencyCtx, {
+            type: 'line',
+            data: {
+                labels: borrowingFrequencyData.map(x => x.BookName),
+                datasets: [{
+                    label: 'Borrowing Frequency',
+                    data: borrowingFrequencyData.map(x => x.Frequency),
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Render Popular Books Bar Chart
+        var popularBooksCtx = document.getElementById('popularBooksChart').getContext('2d');
+        var popularBooksChart = new Chart(popularBooksCtx, {
+            type: 'bar',
+            data: {
+                labels: popularBooksData.map(x => x.BookName),
+                datasets: [{
+                    label: 'Borrow Count',
+                    data: popularBooksData.map(x => x.Count),
+                    backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // IndexedDB setup
+        let db;
+        const request = indexedDB.open('ReportDB', 1);
+
+        request.onupgradeneeded = function (event) {
+            db = event.target.result;
+            const objectStore = db.createObjectStore('reports', { keyPath: 'ReportId' });
+            objectStore.createIndex('title', 'title', { unique: false });
+        };
+
+        request.onsuccess = function (event) {
+            db = event.target.result;
+            displayReports(); // Display reports after DB is ready
+        };
+
+        request.onerror = function (event) {
+            console.error("Database error: " + event.target.errorCode);
+        };
+
+        function saveReportToIndexedDB(report) {
+            const transaction = db.transaction(['reports'], 'readwrite');
+            const objectStore = transaction.objectStore('reports');
+            objectStore.put(report);
+            transaction.oncomplete = function () {
+                console.log('Report saved to IndexedDB successfully!');
+                displayReports(); // Update the report list display after saving
+            };
+            transaction.onerror = function (event) {
+                console.error('Error saving report:', event.target.error);
+            };
+        }
+
+        function deleteReportFromIndexedDB(reportId) {
+            const transaction = db.transaction(['reports'], 'readwrite');
+            const objectStore = transaction.objectStore('reports');
+            objectStore.delete(reportId);
+            transaction.oncomplete = function () {
+                console.log('Report deleted from IndexedDB successfully!');
+                displayReports(); // Update the report list display after deletion
+            };
+            transaction.onerror = function (event) {
+                console.error('Error deleting report:', event.target.error);
+            };
+        }
+
+        function fetchReportsFromIndexedDB(callback) {
+            const transaction = db.transaction(['reports'], 'readonly');
+            const objectStore = transaction.objectStore('reports');
+            const request = objectStore.getAll();
+
+            request.onsuccess = function (event) {
+                callback(event.target.result);
+            };
+            request.onerror = function (event) {
+                console.error('Error fetching reports:', event.target.error);
+            };
+        }
+
+        document.getElementById('saveReportForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var filename = document.getElementById('filename').value;
+
+            // Call the function to generate PDF
+            generatePDF(filename).then(function (base64Data) {
+                saveReportToIndexedDB({
+                    title: filename,
+                    content: 'Report content goes here...', // Replace with actual content
+                    createdDate: new Date().toISOString(),
+                    fileData: base64Data,
+                    ReportId: Date.now() // Use current timestamp as a unique ID
+                });
+                alert('Report saved successfully!');
+            }).catch(function (error) {
+                alert('Error saving report: ' + error);
+            });
+        });
+
+        function generatePDF(filename) {
+            return new Promise((resolve, reject) => {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                const charts = ['studentBorrowingChart', 'borrowingFrequencyChart', 'popularBooksChart'];
+                const table = document.querySelector('table.table-striped');
+
+                let promises = [];
+
+                // Capture charts
+                charts.forEach(chartId => {
+                    const chartElement = document.getElementById(chartId);
+                    if (chartElement) {
+                        promises.push(html2canvas(chartElement).then(canvas => {
+                            const imgData = canvas.toDataURL('image/png');
+                            doc.addImage(imgData, 'PNG', 10, 10 + (charts.indexOf(chartId) * 60), 180, 40); // Adjust position as needed
+                        }));
+                    }
+                });
+
+                // Capture the table
+                if (table) {
+                    promises.push(html2canvas(table).then(canvas => {
+                        const imgData = canvas.toDataURL('image/png');
+                        doc.addPage(); // Add a new page for the table
+                        doc.addImage(imgData, 'PNG', 10, 10, 180, 40); // Adjust position as needed
+                    }));
+                }
+
+                Promise.all(promises).then(() => {
+                    // Output PDF as Base64 string
+                    const base64PDF = doc.output('datauristring');
+                    resolve(base64PDF);
+                }).catch(err => {
+                    reject(err);
+                });
+            });
+        }
+
+        function displayReports() {
+            const reportsContainer = document.getElementById('documentArchive');
+            reportsContainer.innerHTML = ''; // Clear existing reports
+
+            fetchReportsFromIndexedDB(function (reports) {
+                reports.forEach(report => {
+                    const reportItem = document.createElement('li');
+                    reportItem.innerHTML = `
+                        <span>${report.title}</span>
+                        <button class="btn btn-success" onclick="downloadReport('${report.fileData}', '${report.title}')">Download</button>
+                        <button class="btn btn-danger" onclick="deleteReport(${report.ReportId})">Delete</button>
+                        <div class="description" data-report-id="${report.ReportId}" style="height: 150px;"></div>
+                    `;
+                    reportsContainer.appendChild(reportItem);
+
+                    const quill = new Quill(reportItem.querySelector('.description'), {
+                        theme: 'snow',
+                        modules: {
+                            toolbar: [
+                                ['bold', 'italic', 'underline'],
+                                ['link', 'image'],
+                                [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                            ]
+                        }
+                    });
+
+                    quill.root.innerHTML = report.description || ''; // Replace with existing description if it exists
+
+                    // Save description to IndexedDB on change
+                    quill.on('text-change', function () {
+                        saveDescription(report.ReportId, quill.root.innerHTML);
+                    });
+                });
+            });
+        }
+
+        function saveDescription(reportId, description) {
+            const transaction = db.transaction(['reports'], 'readwrite');
+            const objectStore = transaction.objectStore('reports');
+            const request = objectStore.get(reportId);
+
+            request.onsuccess = function (event) {
+                const report = event.target.result;
+                if (report) {
+                    report.description = description;
+                    objectStore.put(report);
+                    console.log('Description saved successfully!');
+                }
+            };
+            request.onerror = function (event) {
+                console.error('Error saving description:', event.target.error);
+            };
+        }
+
+        function downloadReport(fileData, title) {
+            const link = document.createElement('a');
+            link.href = fileData; // Use Base64 string for download
+            link.download = title + '.pdf'; // Change the file extension based on file type if necessary
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function deleteReport(reportId) {
+            deleteReportFromIndexedDB(reportId);
+        }
+    </script>
+}

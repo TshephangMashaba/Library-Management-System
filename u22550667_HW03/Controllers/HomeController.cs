@@ -1,13 +1,16 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
+using System.Xml.Linq;
 using u22550667_HW03.Models;
 
 namespace u22550667_HW03.Controllers
@@ -137,12 +140,163 @@ namespace u22550667_HW03.Controllers
             return View(viewModel);
         }
 
-
-        public ActionResult Report()
+        public ActionResult Report(int? studentId, DateTime? startDate, DateTime? endDate, string frequency = "monthly")
         {
+            int studentIdValue = studentId ?? 0; // Assign 0 if studentId is null
+
+            // Set default date range if not provided
+            if (!startDate.HasValue)
+            {
+                startDate = DateTime.MinValue;
+            }
+
+            if (!endDate.HasValue)
+            {
+                endDate = DateTime.MaxValue;
+            }
 
 
-            return View();
+            // Get Student Borrowing Ranking
+            var studentBorrowingRanking = db.borrows
+           .Where(b => b.takenDate >= startDate && b.takenDate <= endDate)
+           .GroupBy(b => b.studentId) // Group by student ID
+           .Select(group => new
+           {
+               StudentId = group.Key, // Get the student ID
+               BookCount = group.Count() // Count of books borrowed
+           })
+           .Join(db.students, // Assuming 'db.students' is your students table
+               ranking => ranking.StudentId, // Join on the studentId from the borrows group
+               student => student.studentId, // Change to student.studentId
+               (ranking, student) => new BorrowingRanking // Create the BorrowingRanking object
+               {
+                   StudentId = ranking.StudentId ?? 0, // Ensure no null values
+                   StudentName = student.name, // Change to student.name
+                   BookCount = ranking.BookCount // Get the book count
+               })
+           .OrderByDescending(x => x.BookCount) // Order by the count of books borrowed in descending order
+           .Take(10) // Take only the top 10 results
+           .ToList();
+
+            // Log Student Borrowing Ranking Count
+            System.Diagnostics.Debug.WriteLine($"Student Borrowing Ranking Count: {studentBorrowingRanking.Count}");
+
+
+            // Get Borrowing Frequency Report
+            var borrowFrequency = db.borrows
+                .GroupBy(b => b.book.name)
+                .Select(group => new BorrowingFrequency
+                {
+                    BookName = group.Key,
+                    Frequency = group.Count() // Ensure Count() is invoked correctly
+                })
+                .OrderByDescending(x => x.Frequency)
+                .ToList();
+
+            // Get Popular Books Data
+            var popularBooks = db.borrows
+                .Where(b => b.takenDate >= startDate && b.takenDate <= endDate)
+                .GroupBy(b => b.book.name)
+                .Select(group => new PopularBook
+                {
+                    BookName = group.Key,
+                    Count = group.Count()
+                })
+                .OrderByDescending(x => x.Count)
+                .ToList();
+
+            // Combine data into ViewModel
+            var reportViewModel = new ReportViewModel
+            {
+                BorrowingRanking = studentBorrowingRanking,
+                BorrowHistory = null,
+                PopularBooks = popularBooks,
+                BorrowingFrequencies = borrowFrequency,
+                Documents = null
+            };
+
+            // Serialize data for JavaScript
+           
+            ViewBag.PopularBooksData = JsonConvert.SerializeObject(popularBooks);
+            ViewBag.BorrowingFrequencyData = JsonConvert.SerializeObject(borrowFrequency);
+            ViewBag.StudentBorrowingData = JsonConvert.SerializeObject(studentBorrowingRanking);
+
+            return View(reportViewModel);
         }
+
+
+        [HttpPost]
+        public ActionResult SaveReport(string filename, string fileType)
+        {
+            string reportContent = "This is a sample report content."; // Replace with your report data
+
+            string path = Server.MapPath("~/Reports/");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            string filePath = Path.Combine(path, $"{filename}.{fileType}");
+
+            System.IO.File.WriteAllText(filePath, reportContent);
+
+            return RedirectToAction("Report"); // Redirect back to the report page
+        }
+
+        public ActionResult DocumentArchive()
+        {
+            var reports = Directory.GetFiles(Server.MapPath("~/Reports/"))
+                .Select(file => new DocumentViewModel
+                {
+                    Name = Path.GetFileName(file),
+                    Path = Url.Content("~/Reports/" + Path.GetFileName(file))
+                })
+                .ToList();
+
+            return PartialView("_DocumentArchive", reports);
+        }
+
+        // Adjust this to your reports directory path
+        private readonly string reportsDirectory = HttpContext.Current.Server.MapPath("~/Reports");
+
+        // Action to save the report description
+        [HttpPost]
+        public JsonResult SaveDescription(int id, string description)
+        {
+            // You may want to store the description in a temporary store or log it somewhere
+            // For demonstration, we're just logging it. You might store it in a text file, etc.
+            var filePath = Path.Combine(reportsDirectory, $"{id}_description.txt");
+            System.IO.File.WriteAllText(filePath, description); // Save description to a text file
+
+            return Json(new { success = true });
+        }
+
+        // Action to delete a report
+        [HttpPost]
+        public JsonResult DeleteReport(string fileName)
+        {
+            var filePath = Path.Combine(reportsDirectory, fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                System.IO.File.Delete(filePath); // Delete the file
+                return Json(new { success = true });
+            }
+            return Json(new { success = false, message = "Report not found." });
+        }
+
+        // Action to download a report
+        public ActionResult DownloadReport(string fileName)
+        {
+            var filePath = Path.Combine(reportsDirectory, fileName);
+            if (System.IO.File.Exists(filePath))
+            {
+                var fileBytes = System.IO.File.ReadAllBytes(filePath); // Load file
+                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName); // Return file
+            }
+            return HttpNotFound(); // File not found
+        }
+
+
+
     }
 }

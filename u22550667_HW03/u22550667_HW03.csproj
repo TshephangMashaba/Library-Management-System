@@ -264,9 +264,11 @@
     <Content Include="Views\types\Details.cshtml" />
     <Content Include="Views\types\Edit.cshtml" />
     <Content Include="Views\types\Index.cshtml" />
+    <Content Include="Views\Home\Report.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Reports\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
