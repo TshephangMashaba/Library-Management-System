@@ -13,30 +13,29 @@
 </head>
 <body>
     <div>
-        <h4>author</h4>
+        <h4>Author Details</h4>
         <hr />
         <dl class="dl-horizontal">
             <dt>
-                @Html.DisplayNameFor(model => model.name)
+               Author Name
             </dt>
     
             <dd>
                 @Html.DisplayFor(model => model.name)
             </dd>
-    
+            <br />
             <dt>
-                @Html.DisplayNameFor(model => model.surname)
+               Author Surname
             </dt>
     
             <dd>
                 @Html.DisplayFor(model => model.surname)
             </dd>
-    
+           <br />
         </dl>
     </div>
     <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.authorId }) |
-        @Html.ActionLink("Back to List", "Index")
+        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
     </p>
 </body>
 </html>

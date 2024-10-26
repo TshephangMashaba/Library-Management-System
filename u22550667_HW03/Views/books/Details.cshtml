@@ -12,55 +12,58 @@
     <title>Details</title>
 </head>
 <body>
-    <div>
-        <h4>book</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                @Html.DisplayNameFor(model => model.name)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.name)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.pagecount)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.pagecount)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.point)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.point)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.author.name)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.author.name)
-            </dd>
-    
-            <dt>
-                @Html.DisplayNameFor(model => model.type.name)
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.type.name)
-            </dd>
-    
-        </dl>
-    </div>
-    <p>
-        @Html.ActionLink("Edit", "Edit", new { id = Model.bookId }) |
-        @Html.ActionLink("Back to List", "Index")
-    </p>
+    <center>
+        <div>
+
+            <h4>Book Details</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    Book Name
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.name)
+                </dd>
+
+                <dt>
+                    Page Count
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.pagecount)
+                </dd>
+
+                <dt>
+                    Point
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.point)
+                </dd>
+
+                <dt>
+                    Author Name
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.author.name)
+                </dd>
+
+                <dt>
+                    Book Type
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.type.name)
+                </dd>
+
+            </dl>
+        </div>
+        <p>
+
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+        </p>
+    </center>
 </body>
 </html>

@@ -4,7 +4,16 @@
     ViewBag.Title = "Maintain";
 }
 
+<style>
+    .custom-modal {
+        border: 2px solid white; /* Example border color */
+        border-radius: 10px; /* Rounded corners */
+    }
 
+    .modal-content {
+        /* Additional styles for the modal content */
+    }
+</style>
 <div class="container-fluid p-0">
     <div class="row">
         <div class="col-12 col-md-6 vh-100 overflow-auto">
@@ -226,18 +235,28 @@
     </div>
 </div>
 
-<div id="myModal" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+<div id="myModal" class="modal fade" tabindex="-2" style="border-color:white">
+    <div class="modal-dialog" style="border-color:white">
+        <div class="modal-content custom-modal">
+            <div class="modal-header bg-black">
                 <a href="#">
                     <img src="~/Images/Library Management System.png" alt="Logo" style="height: 100px;" />
                 </a>
                 <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close">x</button>
             </div>
-            <div class="modal-body" id="modal-content">
+            <div class="modal-body text-light " id="modal-content" style="background-color: #ff6e29;">
+                <center>
+                  
+                </center>
+            </div>
+            <div class="modal-footer bg-black">
+               
+               
             </div>
         </div>
+    </div>
+</div>
+<div>
     </div>
 </div>
 

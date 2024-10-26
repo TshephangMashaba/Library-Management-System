@@ -50,15 +50,15 @@
             </dd>
     
             <dt>
-                @Html.DisplayNameFor(model => model.class)
+                @Html.DisplayNameFor(model => model.@class)
             </dt>
     
             <dd>
-                @Html.DisplayFor(model => model.class)
+                @Html.DisplayFor(model => model.@class)
             </dd>
     
             <dt>
-                @Html.DisplayNameFor(model => model.point)
+                @Html.DisplayNameFor(model => model.@point)
             </dt>
     
             <dd>
@@ -71,8 +71,8 @@
             @Html.AntiForgeryToken()
     
             <div class="form-actions no-color">
-                <input type="submit" value="Delete" class="btn btn-default" /> |
-                @Html.ActionLink("Back to List", "Index")
+                <input type="submit" value="Delete"  class="btn btn-success" />
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
             </div>
         }
     </div>

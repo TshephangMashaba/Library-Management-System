@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = "Home Page";
 }
-<main>
+
     <div class="container-fluid p-0">
         <div class="row g-0">
             <!-- Students Section -->
@@ -177,71 +177,81 @@
             </div>
         </div>
     </div>
-
-    <div id="myModal" class="modal fade" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">To Do List</h5>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div id="myModal" class="modal fade" tabindex="-2" style="border-color:white">
+        <div class="modal-dialog" style="border-color:white">
+            <div class="modal-content custom-modal">
+                <div class="modal-header bg-black">
+                    <a href="#">
+                        <img src="~/Images/Library Management System.png" alt="Logo" style="height: 100px;" />
+                    </a>
+                    <button type="button" class="btn btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close">x</button>
                 </div>
-                <div class="modal-body" id="modal-content">
+                <div class="modal-body text-light " id="modal-content" style="background-color: #ff6e29;">
+                    <center>
+
+                    </center>
+                </div>
+                <div class="modal-footer bg-black">
+
+
                 </div>
             </div>
         </div>
     </div>
+    <div>
+    </div>
+    </div>
 
-</main>
-@section Scripts {
-    <script>
-        $(function () {
-            // Function to handle Edit link click event in the Combined View and Details modal
-            $(".edit-link, .edit-link-in-modal").click(function (e) {
-                e.preventDefault();
-                var url = $(this).data("url");
+    @section Scripts {
+        <script>
+            $(function () {
+                // Function to handle Edit link click event in the Combined View and Details modal
+                $(".edit-link, .edit-link-in-modal").click(function (e) {
+                    e.preventDefault();
+                    var url = $(this).data("url");
 
-                $.get(url, function (data) {
-                    $("#modal-content").empty();
-                    $("#modal-content").html(data);
+                    $.get(url, function (data) {
+                        $("#modal-content").empty();
+                        $("#modal-content").html(data);
 
-                    // Initialize and show the modal using Bootstrap 5's JavaScript API
-                    var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-                    myModal.show();
+                        // Initialize and show the modal using Bootstrap 5's JavaScript API
+                        var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+                        myModal.show();
+                    });
+                });
+
+                // Function to handle form submission within the modal
+                $("#modal-content").on("submit", "form", function (e) {
+                    e.preventDefault();
+                    var form = $(this);
+                    var url = form.attr("action");
+                    var formData = form.serialize();
+
+                    $.post(url, formData, function (data) {
+                        // Hide the modal using Bootstrap 5's JavaScript API
+                        var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
+                        myModal.hide();
+
+                        // Reload the page to reflect the changes
+                        location.reload();
+                    });
+                });
+
+                // Function to handle other links (details, delete, create) within the modal
+                $(".details-link, .delete-link, .create-link, .create-lookup-link").click(function (e) {
+                    e.preventDefault();
+                    var url = $(this).data("url");
+
+                    $.get(url, function (data) {
+                        $("#modal-content").empty();
+                        $("#modal-content").html(data);
+
+                        // Initialize and show the modal using Bootstrap 5's JavaScript API
+                        var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+                        myModal.show();
+                    });
                 });
             });
-
-            // Function to handle form submission within the modal
-            $("#modal-content").on("submit", "form", function (e) {
-                e.preventDefault();
-                var form = $(this);
-                var url = form.attr("action");
-                var formData = form.serialize();
-
-                $.post(url, formData, function (data) {
-                    // Hide the modal using Bootstrap 5's JavaScript API
-                    var myModal = bootstrap.Modal.getInstance(document.getElementById('myModal'));
-                    myModal.hide();
-
-                    // Reload the page to reflect the changes
-                    location.reload();
-                });
-            });
-
-            // Function to handle other links (details, delete, create) within the modal
-            $(".details-link, .delete-link, .create-link, .create-lookup-link").click(function (e) {
-                e.preventDefault();
-                var url = $(this).data("url");
-
-                $.get(url, function (data) {
-                    $("#modal-content").empty();
-                    $("#modal-content").html(data);
-
-                    // Initialize and show the modal using Bootstrap 5's JavaScript API
-                    var myModal = new bootstrap.Modal(document.getElementById('myModal'));
-                    myModal.show();
-                });
-            });
-        });
-    </script>
-}
+        </script>
+    }
 
