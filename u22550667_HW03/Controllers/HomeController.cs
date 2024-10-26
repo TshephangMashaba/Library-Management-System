@@ -19,7 +19,7 @@ namespace u22550667_HW03.Controllers
         // Define the number of elements per page
         int numberElementsPerPage = 10;
 
-     
+
         public async Task<ActionResult> Index(int? page, int? bookPage)
         {
             // Determine the current page number for students and books, defaulting to 1 if null
@@ -140,7 +140,7 @@ namespace u22550667_HW03.Controllers
 
         public ActionResult Report()
         {
-           
+
 
             return View();
         }

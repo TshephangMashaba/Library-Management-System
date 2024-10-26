@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using u22550667_HW03.Models;
 
-namespace u22550667_HW03
+namespace u22550667_HW03.Controllers
 {
     public class authorsController : Controller
     {
