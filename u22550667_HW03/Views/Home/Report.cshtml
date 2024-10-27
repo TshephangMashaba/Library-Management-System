@@ -5,77 +5,158 @@
 }
 <!-- Include Rich Text Editor Library -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-<h2>Report</h2>
-<div>
-    <h3>Student Borrowing Ranking</h3>
-    <canvas id="studentBorrowingChart"></canvas>
-    <br />
-    <h3>Student Borrowing Ranking Table</h3>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Student ID</th>
-                <th>Student Name</th> <!-- Added header for Student Name -->
-                <th>Books Borrowed</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var ranking in Model.BorrowingRanking)
-            {
-                <tr>
-                    <td>@ranking.StudentId</td>
-                    <td>@ranking.StudentName</td> <!-- Display the Student Name -->
-                    <td>@ranking.BookCount</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<!-- Dashboard Report -->
+<div class="container mt-4 ">
+    <div class="card bg-danger text-white rounded">
+        <div class="card-body  ">
+            <h2 class="mb-4">Report Dashboard</h2>
+            <div class="row">
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <h3>Borrowing Frequency</h3>
-    <canvas id="borrowingFrequencyChart"></canvas>
+<!-- Dashboard Report -->
+<!-- Dashboard Report -->
+<div class="container mt-4">
+    <div class="row">
+        <!-- Charts Column -->
+        <div class="col-md-6 mb-4">
+            <!-- Student Borrowing Ranking Chart -->
+            <div class="card shadow-sm mb-4 bg-success text-white rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Student Borrowing Ranking</h5>
+                    <canvas id="studentBorrowingChart" style="max-height: 150px;"></canvas>
+                </div>
+            </div>
+            <!-- Borrowing Frequency Chart -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Borrowing Frequency</h5>
+                    <canvas id="borrowingFrequencyChart" style="max-height: 150px;"></canvas>
+                </div>
+            </div>
+            <!-- Popular Books Chart -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Popular Books</h5>
+                    <canvas id="popularBooksChart" style="max-height: 150px;"></canvas>
+                </div>
+            </div>
+        </div>
+        <!-- Table Column -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm" style="height: calc(100% - 1rem);">
+                <div class="card-body">
+                    <h5 class="card-title">Student Borrowing Ranking Table</h5>
+                    <div style="overflow-y: auto; max-height: 500px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Student ID</th>
+                                    <th>Student Name</th>
+                                    <th>Books Borrowed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ranking in Model.BorrowingRanking)
+                                {
+                                    <tr>
+                                        <td>@ranking.StudentId</td>
+                                        <td>@ranking.StudentName</td>
+                                        <td>@ranking.BookCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
-<div>
-    <h3>Popular Books</h3>
-    <canvas id="popularBooksChart"></canvas>
-</div>
+<!-- Dashboard Layout -->
+<div class="container mt-4">
+    <div class="row">
+        <!-- Save Report Form - Smaller Column -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form id="saveReportForm">
+                        <h3 class="mb-3">Save Report</h3>
+                        <div class="form-group mb-3">
+                            <label for="filename" class="form-label">Filename</label>
+                            <input type="text" class="form-control" id="filename" placeholder="Enter filename" required />
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="fileType" class="form-label">File Type</label>
+                            <select id="fileType" class="form-select" required>
+                                <option value="pdf">PDF</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Save Report</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Document Archive - Larger Column -->
+        <div class="col-md-8 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-danger text-white d-flex align-items-center">
+                    <h3 class="mb-0 flex-grow-1">Document Archive</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Controls</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody id="documentArchive">
+                                <!-- This table will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- Form to Save Report -->
-<div>
-    <h3>Save Report</h3>
-    <form id="saveReportForm">
-        <input type="text" id="filename" placeholder="Filename" required />
-        <select id="fileType">
-            <option value="pdf">PDF</option>
-            <option value="excel">Excel</option>
-        </select>
-        <button type="submit">Save Report</button>
-    </form>
-</div>
-
-<!-- Document Archive Section -->
-<div>
-    <h3>Document Archive</h3>
-    <ul id="documentArchive">
-        <!-- This list will be populated by JavaScript -->
-    </ul>
-</div>
-
-
+        <!-- Add Description Modal -->
+        <div class="modal fade" id="addDescriptionModal" tabindex="-1" aria-labelledby="addDescriptionModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="addDescriptionModalLabel">Add Description</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addDescriptionForm">
+                            <input type="hidden" id="selectedReportId"> <!-- Hidden input to hold the report ID -->
+                            <div class="mb-3">
+                                <label for="documentDescription" class="form-label">Description</label>
+                                <div id="quillEditor" style="height: 150px;"></div> <!-- Quill editor container -->
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Add Description</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
 
 
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+            @section Scripts {
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+                <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
 
 
-    <script>
+                <script>
         // Parse the data from ViewBag
         var popularBooksData = @Html.Raw(ViewBag.PopularBooksData);
         var borrowingFrequencyData = @Html.Raw(ViewBag.BorrowingFrequencyData);
@@ -212,21 +293,64 @@
         document.getElementById('saveReportForm').addEventListener('submit', function (event) {
             event.preventDefault();
             var filename = document.getElementById('filename').value;
+            var fileType = document.getElementById('fileType').value; // Get selected file type
 
-            // Call the function to generate PDF
-            generatePDF(filename).then(function (base64Data) {
-                saveReportToIndexedDB({
-                    title: filename,
-                    content: 'Report content goes here...', // Replace with actual content
-                    createdDate: new Date().toISOString(),
-                    fileData: base64Data,
-                    ReportId: Date.now() // Use current timestamp as a unique ID
+            if (fileType === 'pdf') {
+                // Generate PDF
+                generatePDF(filename).then(function (base64Data) {
+                    saveReportToIndexedDB({
+                        title: filename,
+                        content: 'Report content goes here...', // Replace with actual content
+                        createdDate: new Date().toISOString(),
+                        fileData: base64Data,
+                        ReportId: Date.now(), // Use current timestamp as a unique ID
+                    });
+                    alert('PDF Report saved successfully!');
+                }).catch(function (error) {
+                    alert('Error saving PDF report: ' + error);
                 });
-                alert('Report saved successfully!');
-            }).catch(function (error) {
-                alert('Error saving report: ' + error);
-            });
+            } else if (fileType === 'excel') {
+                // Generate Excel
+                generateExcel(filename).then(function (base64Data) {
+                    saveReportToIndexedDB({
+                        title: filename,
+                        content: 'Report content goes here...', // Replace with actual content
+                        createdDate: new Date().toISOString(),
+                        fileData: base64Data,
+                        ReportId: Date.now(), // Use current timestamp as a unique ID
+                    });
+                    alert('Excel Report saved successfully!');
+                }).catch(function (error) {
+                    alert('Error saving Excel report: ' + error);
+                });
+            }
         });
+
+
+        function generateExcel(filename) {
+            return new Promise(function (resolve, reject) {
+                var ws = XLSX.utils.json_to_sheet(popularBooksData); // Convert your data to a sheet
+                var wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, 'Report Data');
+
+                // Generate a Blob for the file
+                var blob = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+                var buffer = new ArrayBuffer(blob.length);
+                var view = new Uint8Array(buffer);
+                for (var i = 0; i < blob.length; i++) {
+                    view[i] = blob.charCodeAt(i) & 0xFF;
+                }
+                var fileReader = new FileReader();
+                var blobData = new Blob([buffer], { type: 'application/octet-stream' });
+
+                // Read as Base64 and resolve
+                fileReader.onload = function (event) {
+                    resolve(event.target.result); // Return base64 string
+                };
+                fileReader.readAsDataURL(blobData); // Read as Data URL for Base64
+            });
+        }
+
 
         function generatePDF(filename) {
             return new Promise((resolve, reject) => {
@@ -267,42 +391,154 @@
                 });
             });
         }
+                    function displayReports() {
+                        const reportsContainer = document.getElementById('documentArchive');
+                        reportsContainer.innerHTML = ''; // Clear existing reports
 
-        function displayReports() {
-            const reportsContainer = document.getElementById('documentArchive');
-            reportsContainer.innerHTML = ''; // Clear existing reports
+                        // Show a loading spinner while fetching data
+                        reportsContainer.innerHTML = `
+        <tr>
+            <td colspan="3" class="text-center py-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </td>
+        </tr>`;
 
-            fetchReportsFromIndexedDB(function (reports) {
-                reports.forEach(report => {
-                    const reportItem = document.createElement('li');
-                    reportItem.innerHTML = `
-                        <span>${report.title}</span>
-                        <button class="btn btn-success" onclick="downloadReport('${report.fileData}', '${report.title}')">Download</button>
-                        <button class="btn btn-danger" onclick="deleteReport(${report.ReportId})">Delete</button>
-                        <div class="description" data-report-id="${report.ReportId}" style="height: 150px;"></div>
-                    `;
-                    reportsContainer.appendChild(reportItem);
+                        fetchReportsFromIndexedDB(function (reports) {
+                            reportsContainer.innerHTML = ''; // Clear loading indicator
 
-                    const quill = new Quill(reportItem.querySelector('.description'), {
-                        theme: 'snow',
-                        modules: {
-                            toolbar: [
-                                ['bold', 'italic', 'underline'],
-                                ['link', 'image'],
-                                [{ 'list': 'ordered' }, { 'list': 'bullet' }]
-                            ]
-                        }
+                            if (reports.length === 0) {
+                                reportsContainer.innerHTML = `
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No documents found.</td>
+                </tr>`;
+                                return;
+                            }
+
+                            reports.forEach(report => {
+                                const reportRow = document.createElement('tr');
+                                reportRow.innerHTML = `
+                <td>${report.title}</td>
+                <td>
+                    <div class="description bg-light p-2 rounded" data-report-id="${report.ReportId}" style="height: 150px; overflow-y: auto;"></div>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" onclick="downloadReport('${report.fileData}', '${report.title}', 'pdf')">
+                            <i class="bi bi-download"></i> Download
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteReport(${report.ReportId})">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                        <button class="btn btn-info btn-sm" onclick="openAddDescriptionModal('${report.ReportId}', '${report.description || ''}')">
+                            <i class="bi bi-plus-circle"></i> Add Description
+                        </button>
+                    </div>
+                </td>
+            `;
+                                reportsContainer.appendChild(reportRow);
+
+                                const quill = new Quill(reportRow.querySelector('.description'), {
+                                    theme: 'snow',
+                                    modules: {
+                                        toolbar: [
+                                            ['bold', 'italic', 'underline'],
+                                            ['link', 'image'],
+                                            [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                                        ]
+                                    }
+                                });
+
+                                quill.root.innerHTML = report.description || ''; // Load existing description
+
+                                quill.on('text-change', function () {
+                                    saveDescription(report.ReportId, quill.root.innerHTML);
+                                });
+                            });
+                        });
+                    }
+
+
+                    let quill; // Declare the Quill variable at a higher scope to access it later
+
+                    document.addEventListener('DOMContentLoaded', function () {
+                        quill = new Quill('#quillEditor', {
+                            theme: 'snow',
+                            modules: {
+                                toolbar: [
+                                    ['bold', 'italic', 'underline'],
+                                    ['link', 'image'],
+                                    [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                                ]
+                            }
+                        });
+
+                        document.getElementById('addDescriptionForm').addEventListener('submit', function (event) {
+                            event.preventDefault(); // Prevent the default form submission
+
+                            const reportId = document.getElementById('selectedReportId').value; // Get the report ID
+                            const description = quill.root.innerHTML; // Get the content from Quill
+
+                            // Clear the form fields
+                            quill.setContents([]); // Reset the Quill editor
+
+                            // Close the modal
+                            const modal = bootstrap.Modal.getInstance(document.getElementById('addDescriptionModal'));
+                            modal.hide();
+
+                            // Update the description in the table
+                            const reportRow = document.querySelector(`[data-report-id='${reportId}']`);
+                            if (reportRow) {
+                                const descriptionDiv = reportRow.querySelector('.description');
+                                descriptionDiv.innerHTML = description; // Update with new description
+                            }
+
+                            // Save the new description to IndexedDB or your storage method
+                            saveDescription(reportId, description);
+                        });
                     });
 
-                    quill.root.innerHTML = report.description || ''; // Replace with existing description if it exists
+                    // Function to display reports
+                    function displayReports() {
+                        const reportsContainer = document.getElementById('documentArchive');
+                        reportsContainer.innerHTML = ''; // Clear existing reports
 
-                    // Save description to IndexedDB on change
-                    quill.on('text-change', function () {
-                        saveDescription(report.ReportId, quill.root.innerHTML);
-                    });
-                });
-            });
-        }
+                        fetchReportsFromIndexedDB(function (reports) {
+                            reports.forEach(report => {
+                                const reportRow = document.createElement('tr');
+                                reportRow.setAttribute('data-report-id', report.ReportId); // Set data attribute for easy access
+                                reportRow.innerHTML = `
+                <td>${report.title}</td>
+                <td>
+                    <div class="btn-group">
+                        <button class="btn btn-success btn-sm" onclick="downloadReport('${report.fileData}', '${report.title}', 'pdf')">
+                            <i class="bi bi-download"></i> Download
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteReport(${report.ReportId})">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                        <button class="btn btn-info btn-sm" onclick="openAddDescriptionModal('${report.ReportId}', '${report.description || ''}')">
+                            <i class="bi bi-plus-circle"></i> Add Description
+                        </button>
+                    </div>
+                </td>
+                <td>
+                    <div class="description bg-light p-2 rounded" style="height: 150px; overflow-y: auto;">${report.description || ''}</div>
+                </td>
+            `;
+                                reportsContainer.appendChild(reportRow);
+                            });
+                        });
+                    }
+
+                    // Function to open the modal for adding a description
+                    function openAddDescriptionModal(reportId, existingDescription) {
+                        document.getElementById('selectedReportId').value = reportId; // Set the report ID
+                        quill.root.innerHTML = existingDescription; // Load existing description
+                        const modal = new bootstrap.Modal(document.getElementById('addDescriptionModal'));
+                        modal.show(); // Show the modal
+                    }
 
         function saveDescription(reportId, description) {
             const transaction = db.transaction(['reports'], 'readwrite');
@@ -322,17 +558,30 @@
             };
         }
 
-        function downloadReport(fileData, title) {
+        function downloadReport(fileData, title, fileType) {
             const link = document.createElement('a');
             link.href = fileData; // Use Base64 string for download
-            link.download = title + '.pdf'; // Change the file extension based on file type if necessary
+
+            // Check the file type and set the appropriate extension
+            if (fileType === 'pdf') {
+                link.download = title + '.pdf';
+            } else if (fileType === 'excel') {
+                link.download = title + '.xlsx'; // Use .xlsx for Excel files
+            } else {
+                console.error('Unsupported file type'); // Handle unsupported file types
+                return; // Exit the function if the file type is unsupported
+            }
+
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
+
+
         function deleteReport(reportId) {
             deleteReportFromIndexedDB(reportId);
         }
-    </script>
-}
+                </script>
+            }
+        </div>

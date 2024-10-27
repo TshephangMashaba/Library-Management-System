@@ -243,58 +243,8 @@ namespace u22550667_HW03.Controllers
             return RedirectToAction("Report"); // Redirect back to the report page
         }
 
-        public ActionResult DocumentArchive()
-        {
-            var reports = Directory.GetFiles(Server.MapPath("~/Reports/"))
-                .Select(file => new DocumentViewModel
-                {
-                    Name = Path.GetFileName(file),
-                    Path = Url.Content("~/Reports/" + Path.GetFileName(file))
-                })
-                .ToList();
-
-            return PartialView("_DocumentArchive", reports);
-        }
-
-        // Adjust this to your reports directory path
-        private readonly string reportsDirectory = HttpContext.Current.Server.MapPath("~/Reports");
-
-        // Action to save the report description
-        [HttpPost]
-        public JsonResult SaveDescription(int id, string description)
-        {
-            // You may want to store the description in a temporary store or log it somewhere
-            // For demonstration, we're just logging it. You might store it in a text file, etc.
-            var filePath = Path.Combine(reportsDirectory, $"{id}_description.txt");
-            System.IO.File.WriteAllText(filePath, description); // Save description to a text file
-
-            return Json(new { success = true });
-        }
-
-        // Action to delete a report
-        [HttpPost]
-        public JsonResult DeleteReport(string fileName)
-        {
-            var filePath = Path.Combine(reportsDirectory, fileName);
-            if (System.IO.File.Exists(filePath))
-            {
-                System.IO.File.Delete(filePath); // Delete the file
-                return Json(new { success = true });
-            }
-            return Json(new { success = false, message = "Report not found." });
-        }
-
-        // Action to download a report
-        public ActionResult DownloadReport(string fileName)
-        {
-            var filePath = Path.Combine(reportsDirectory, fileName);
-            if (System.IO.File.Exists(filePath))
-            {
-                var fileBytes = System.IO.File.ReadAllBytes(filePath); // Load file
-                return File(fileBytes, System.Net.Mime.MediaTypeNames.Application.Octet, fileName); // Return file
-            }
-            return HttpNotFound(); // File not found
-        }
+       
+      
 
 
 
