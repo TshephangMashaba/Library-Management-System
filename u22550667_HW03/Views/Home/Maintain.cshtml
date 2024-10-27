@@ -16,313 +16,315 @@
 </style>
 
 
-<div class="row mb-3">
-    <div class="col-12">
+<div class="container mt-2">
+
+    <div class="col-14">
+
         <div class="card bg-danger text-white">
             <div class="card-body">
                 <div class="d-flex  align-items-center">
                     <h2 class="text-light m-0">Maintain</h2>
                 </div>
                 <br />
-         
+
             </div>
         </div>
     </div>
-</div>
 
-<div class="container p-0">
-    <div class="row">
-        <div class="col-12 col-md-6">
-            <!-- Authors Section -->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card bg-dark text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h2 class="m-0 text-danger">Authors</h2>
-                                <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "authors")">Create</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-responsive bg-dark text-white p-3 rounded">
-                <table class="table table-dark">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Surname</th>
-                            <th>Maintain</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var author in Model.Author)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => author.name)</td>
-                                <td>@Html.DisplayFor(modelItem => author.surname)</td>
-                                <td>
-                                    <a href="#" class="edit-link btn btn-success" data-url="@Url.Action("Edit", "authors", new { id = author.authorId })">Edit</a>
-                                    <a href="#" class="delete-link btn btn-warning" data-url="@Url.Action("Delete", "authors", new { id = author.authorId })">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <br />
-            <div class="mb-3">
-                <div class="card bg-dark text-white">
-                    <div class="card-body">
-                        <div class="d-flex flex-column align-items-center">
-                          
-                            <div class="pagination-lg text-center">
-                                <!-- Center the pagination links -->
-                                @if (ViewBag.TotalAuthorPages > 1)
-                                {
-                                    int maxPagesToShow = 10;
-                                    int currentPage = ViewBag.CurrentAuthorPage;
-                                    int totalPages = ViewBag.TotalAuthorPages;
-                                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
-                                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
-                                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-
-                                    // Show "Previous" button if not on the first page
-                                    if (currentPage > 1)
-                                    {
-                                        @Html.ActionLink("« Previous", "Maintain", new { authorPage = currentPage - 1, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
-                                    }
-
-                                    // Show individual page numbers
-                                    for (int i = startPage; i <= endPage; i++)
-                                    {
-                                        if (i == currentPage)
-                                        {
-                                            <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
-                                        }
-                                        else
-                                        {
-                                            @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = i, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
-                                        }
-                                    }
-
-                                    // Show "Next" button if not on the last page
-                                    if (currentPage < totalPages)
-                                    {
-                                        @Html.ActionLink("Next »", "Maintain", new { authorPage = currentPage + 1, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
-                                    }
-                                }
-                                @* Pagination ends here *@
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-md-6">
-            <!-- Types Section -->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card bg-dark text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h2 class="text-danger m-0">Types</h2>
-                                <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "types")">Create</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-responsive bg-dark text-white p-3 rounded">
-                <table class="table table-dark">
-                    <thead>
-                        <tr>
-                            <th>Type Name</th>
-                            <th>Maintain</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var type in Model.Type)
-                        {
-                            <tr>
-                                <td>@Html.DisplayFor(modelItem => type.name)</td>
-                                <td>
-                                    <a href="#" class="edit-link btn btn-success" data-url="@Url.Action("Edit", "types", new { id = type.typeId })">Edit</a>
-                                    <a href="#" class="delete-link btn btn-warning" data-url="@Url.Action("Delete", "types", new { id = type.typeId })">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <br />
-            <div class="mb-3">
-                <div class="card bg-dark text-white">
-                    <div class="card-body">
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="pagination-lg text-center">
-                                <!-- Center the pagination links -->
-                                @if (ViewBag.TotalTypePages > 1)
-                                {
-                                    int maxPagesToShow = 10;
-                                    int currentPage = ViewBag.CurrentTypePage;
-                                    int totalPages = ViewBag.TotalTypePages;
-                                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
-                                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
-                                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-
-                                    // Show "Previous" button if not on the first page
-                                    if (currentPage > 1)
-                                    {
-                                        @Html.ActionLink("« Previous", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = currentPage - 1, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
-                                    }
-
-                                    // Show individual page numbers
-                                    for (int i = startPage; i <= endPage; i++)
-                                    {
-                                        if (i == currentPage)
-                                        {
-                                            <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
-                                        }
-                                        else
-                                        {
-                                            @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = i, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
-                                        }
-                                    }
-
-                                    // Show "Next" button if not on the last page
-                                    if (currentPage < totalPages)
-                                    {
-                                        @Html.ActionLink("Next »", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = currentPage + 1, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
-                                    }
-                                }
-                                @* Pagination ends here *@
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<br />
-<br />
-<div class="container">
-    <div class="row">
-        <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card bg-dark text-white">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h2 class="m-0">Borrows</h2>
-                                <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "borrows")">Create</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="table-responsive bg-dark text-white p-3 rounded">
-                <table class="table table-dark w-100">
-                    <tr>
-                        <th>
-                            Taken Date
-
-                        </th>
-                        <th>
-                            Brought Date
-                        </th>
-                        <th>
-                            Book Name
-                        </th>
-                        <th>
-                            Student Name
-                        </th>
-                        <th>
-                            Maintain
-                        </th>
-                    </tr>
-
-                    @foreach (var borrow in Model.Borrow)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => borrow.takenDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => borrow.broughtDate)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => borrow.book.name)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => borrow.student.name)
-                            </td>
-                            <td>
-                                <a href="#" class="edit-link btn btn-success" data-url="@Url.Action("Edit", "borrows", new { id = borrow.borrowId })">Edit</a>
-                                <a href="#" class="delete-link btn btn-warning" data-url="@Url.Action("Delete", "borrows", new { id = borrow.borrowId })">Delete</a>
-                            </td>
-                        </tr>
-                    }
-
-                </table>
-            </div>
-        </div>
-    </div>
-    <!-- Pagination controls for Borrows -->
     <br />
-    <div class="mb-3">
-        <div class="card bg-dark text-white">
-            <div class="card-body">
-                <div class="d-flex flex-column align-items-center">
-               
-                    <div class="pagination text-center">
-                        <!-- Center the pagination links -->
-                        @if (ViewBag.TotalBorrowPages > 1)
-                        {
-                            int maxPagesToShow = 10;
-                            int currentPage = ViewBag.CurrentBorrowPage;
-                            int totalPages = ViewBag.TotalBorrowPages;
-                            int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
-                            int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
-                            startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-
-                            // Show "Previous" button if not on the first page
-                            if (currentPage > 1)
+    <div class="container p-0">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <!-- Authors Section -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="card bg-dark text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h2 class="m-0 text-danger">Authors</h2>
+                                    <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "authors")">Create</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive bg-dark text-white p-3 rounded">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Surname</th>
+                                <th>Maintain</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var author in Model.Author)
                             {
-                                @Html.ActionLink("« Previous", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = currentPage - 1 }, new { @class = "btn btn-dark" })
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => author.name)</td>
+                                    <td>@Html.DisplayFor(modelItem => author.surname)</td>
+                                    <td>
+                                        <a href="#" class="edit-link btn btn-success" data-url="@Url.Action("Edit", "authors", new { id = author.authorId })">Edit</a>
+                                        <a href="#" class="delete-link btn btn-warning" data-url="@Url.Action("Delete", "authors", new { id = author.authorId })">Delete</a>
+                                    </td>
+                                </tr>
                             }
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div class="mb-3">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center">
 
-                            // Show individual page numbers
-                            for (int i = startPage; i <= endPage; i++)
-                            {
-                                if (i == currentPage)
-                                {
-                                    <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
-                                }
-                                else
-                                {
-                                    @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = i }, new { @class = "btn btn-dark" })
-                                }
-                            }
+                                <div class="pagination-lg text-center">
+                                    <!-- Center the pagination links -->
+                                    @if (ViewBag.TotalAuthorPages > 1)
+                                    {
+                                        int maxPagesToShow = 10;
+                                        int currentPage = ViewBag.CurrentAuthorPage;
+                                        int totalPages = ViewBag.TotalAuthorPages;
+                                        int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                                        int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                                        startPage = Math.Max(1, endPage - maxPagesToShow + 1);
 
-                            // Show "Next" button if not on the last page
-                            if (currentPage < totalPages)
+                                        // Show "Previous" button if not on the first page
+                                        if (currentPage > 1)
+                                        {
+                                            @Html.ActionLink("« Previous", "Maintain", new { authorPage = currentPage - 1, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
+                                        }
+
+                                        // Show individual page numbers
+                                        for (int i = startPage; i <= endPage; i++)
+                                        {
+                                            if (i == currentPage)
+                                            {
+                                                <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = i, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
+                                            }
+                                        }
+
+                                        // Show "Next" button if not on the last page
+                                        if (currentPage < totalPages)
+                                        {
+                                            @Html.ActionLink("Next »", "Maintain", new { authorPage = currentPage + 1, typePage = ViewBag.CurrentTypePage, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
+                                        }
+                                    }
+                                    @* Pagination ends here *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <!-- Types Section -->
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="card bg-dark text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h2 class="text-danger m-0">Types</h2>
+                                    <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "types")">Create</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive bg-dark text-white p-3 rounded">
+                    <table class="table table-dark">
+                        <thead>
+                            <tr>
+                                <th>Type Name</th>
+                                <th>Maintain</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var type in Model.Type)
                             {
-                                @Html.ActionLink("Next »", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = currentPage + 1 }, new { @class = "btn btn-dark" })
+                                <tr>
+                                    <td>@Html.DisplayFor(modelItem => type.name)</td>
+                                    <td>
+                                        <a href="#" class="edit-link btn btn-success" data-url="@Url.Action("Edit", "types", new { id = type.typeId })">Edit</a>
+                                        <a href="#" class="delete-link btn btn-warning" data-url="@Url.Action("Delete", "types", new { id = type.typeId })">Delete</a>
+                                    </td>
+                                </tr>
                             }
-                        }
-                        @* Pagination ends here *@
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div class="mb-3">
+                    <div class="card bg-dark text-white">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="pagination-lg text-center">
+                                    <!-- Center the pagination links -->
+                                    @if (ViewBag.TotalTypePages > 1)
+                                    {
+                                        int maxPagesToShow = 10;
+                                        int currentPage = ViewBag.CurrentTypePage;
+                                        int totalPages = ViewBag.TotalTypePages;
+                                        int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                                        int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                                        startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                                        // Show "Previous" button if not on the first page
+                                        if (currentPage > 1)
+                                        {
+                                            @Html.ActionLink("« Previous", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = currentPage - 1, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
+                                        }
+
+                                        // Show individual page numbers
+                                        for (int i = startPage; i <= endPage; i++)
+                                        {
+                                            if (i == currentPage)
+                                            {
+                                                <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
+                                            }
+                                            else
+                                            {
+                                                @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = i, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
+                                            }
+                                        }
+
+                                        // Show "Next" button if not on the last page
+                                        if (currentPage < totalPages)
+                                        {
+                                            @Html.ActionLink("Next »", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = currentPage + 1, borrowPage = ViewBag.CurrentBorrowPage }, new { @class = "btn btn-dark" })
+                                        }
+                                    }
+                                    @* Pagination ends here *@
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-</div>
+    <br />
+    <br />
+    <div class="container">
+        <div class="row">
+            <div class="container-fluid">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="card bg-dark text-white">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h2 class="m-0">Borrows</h2>
+                                    <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "borrows")">Create</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive bg-dark text-white p-3 rounded">
+                    <table class="table table-dark w-100">
+                        <tr>
+                            <th>
+                                Taken Date
 
+                            </th>
+                            <th>
+                                Brought Date
+                            </th>
+                            <th>
+                                Book Name
+                            </th>
+                            <th>
+                                Student Name
+                            </th>
+                            <th>
+                                Maintain
+                            </th>
+                        </tr>
+
+                        @foreach (var borrow in Model.Borrow)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => borrow.takenDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => borrow.broughtDate)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => borrow.book.name)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => borrow.student.name)
+                                </td>
+                                <td>
+                                    <a href="#" class="edit-link btn btn-success" data-url="@Url.Action("Edit", "borrows", new { id = borrow.borrowId })">Edit</a>
+                                    <a href="#" class="delete-link btn btn-warning" data-url="@Url.Action("Delete", "borrows", new { id = borrow.borrowId })">Delete</a>
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Pagination controls for Borrows -->
+        <br />
+        <div class="mb-3">
+            <div class="card bg-dark text-white">
+                <div class="card-body">
+                    <div class="d-flex flex-column align-items-center">
+
+                        <div class="pagination text-center">
+                            <!-- Center the pagination links -->
+                            @if (ViewBag.TotalBorrowPages > 1)
+                            {
+                                int maxPagesToShow = 10;
+                                int currentPage = ViewBag.CurrentBorrowPage;
+                                int totalPages = ViewBag.TotalBorrowPages;
+                                int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                                int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                                startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                                // Show "Previous" button if not on the first page
+                                if (currentPage > 1)
+                                {
+                                    @Html.ActionLink("« Previous", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = currentPage - 1 }, new { @class = "btn btn-dark" })
+                                }
+
+                                // Show individual page numbers
+                                for (int i = startPage; i <= endPage; i++)
+                                {
+                                    if (i == currentPage)
+                                    {
+                                        <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink(i.ToString(), "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = i }, new { @class = "btn btn-dark" })
+                                    }
+                                }
+
+                                // Show "Next" button if not on the last page
+                                if (currentPage < totalPages)
+                                {
+                                    @Html.ActionLink("Next »", "Maintain", new { authorPage = ViewBag.CurrentAuthorPage, typePage = ViewBag.CurrentTypePage, borrowPage = currentPage + 1 }, new { @class = "btn btn-dark" })
+                                }
+                            }
+                            @* Pagination ends here *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
     </div>
 
     <div id="myModal" class="modal fade" tabindex="-2" style="border-color:white">

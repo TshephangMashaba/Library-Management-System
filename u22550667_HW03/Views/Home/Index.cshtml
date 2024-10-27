@@ -5,12 +5,13 @@
 @{
     ViewBag.Title = "Home Page";
 }
+<br />
 <div class="row mb-3">
     <div class="col-12">
         <div class="card text-white" style="background-color:orangered">
             <div class="card-body">
                 <div class="d-flex  align-items-center">
-                    <h2 class="text-light m-0">Home</h2>
+                    <h1 class="text-light m-0">Home</h1>
                 </div>
                 <br />
 
@@ -20,202 +21,186 @@
 </div>
 
 <div class="container-fluid p-0">
-    <div class="row g-0">
-        <!-- Students Section -->
-
-        <div class="mb-3">
-            <div class="card bg-dark text-white">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h2 class="m-0 text-danger">Students</h2>
-                        <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "students")">Create</a>
+    <div class="row g-3">
+        <!-- Left Column - Students Section -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="m-0 text-danger">Students</h2>
+                            <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "students")">Create</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="table-responsive bg-dark text-white p-3 rounded">
-            <table class="table table-dark w-100">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Surname</th>
-                        <th>Birth Date</th>
-                        <th>Gender</th>
-                        <th>Class</th>
-                        <th>Point</th>
-                        <th>Status</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var students in Model.Students)
-                    {
+            <div class="table-responsive bg-dark text-white p-3 rounded">
+                <table class="table table-dark w-100">
+                    <thead>
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => students.name)</td>
-                            <td>@Html.DisplayFor(modelItem => students.surname)</td>
-                            <td>@Html.DisplayFor(modelItem => students.birthdate)</td>
-                            <td>@Html.DisplayFor(modelItem => students.gender)</td>
-                            <td>@Html.DisplayFor(modelItem => students.@class)</td>
-                            <td>@Html.DisplayFor(modelItem => students.point)</td>
-                            <td>
-                                <a href="#" class="details-link btn btn-success" data-url="@Url.Action("Details", "students", new { id = students.studentId })">Details</a>
-                            </td>
+                            <th>Name</th>
+                            <th>Surname</th>
+                            <th>Birth Date</th>
+                            <th>Gender</th>
+                            <th>Class</th>
+                            <th>Point</th>
+                            <th></th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <br />
-    <div class="mb-3">
-        <div class="card bg-dark text-white">
-            <div class="card-body">
-                <div class="d-flex flex-column align-items-center">
-                    <div class="pagination-lg text-center">
-                        <!-- Center the pagination links -->
-                        @if (ViewBag.TotalStudentPages > 1)
+                    </thead>
+                    <tbody>
+                        @foreach (var students in Model.Students)
                         {
-                            int maxPagesToShow = 10; // Maximum number of pages to display at once
-                            int currentPage = ViewBag.CurrentStudentPage;
-                            int totalPages = ViewBag.TotalStudentPages;
-
-                            // Calculate the start and end page numbers for pagination
-                            int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
-                            int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
-                            startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-
-                            // Show "Previous" button if not on the first page
-                            if (currentPage > 1)
-                            {
-                                @Html.ActionLink("« Previous", "Index", new { page = currentPage - 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
-                            }
-
-                            // Show individual page numbers
-                            for (int i = startPage; i <= endPage; i++)
-                            {
-                                if (i == currentPage)
-                                {
-                                    <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
-                                }
-                                else
-                                {
-                                    @Html.ActionLink(i.ToString(), "Index", new { page = i, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
-                                }
-                            }
-
-                            // Show "Next" button if not on the last page
-                            if (currentPage < totalPages)
-                            {
-                                @Html.ActionLink("Next »", "Index", new { page = currentPage + 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
-                            }
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => students.name)</td>
+                                <td>@Html.DisplayFor(modelItem => students.surname)</td>
+                                <td>@Html.DisplayFor(modelItem => students.birthdate)</td>
+                                <td>@Html.DisplayFor(modelItem => students.gender)</td>
+                                <td>@Html.DisplayFor(modelItem => students.@class)</td>
+                                <td>@Html.DisplayFor(modelItem => students.point)</td>
+                                <td>
+                                    <a href="#" class="details-link btn btn-success" data-url="@Url.Action("Details", "students", new { id = students.studentId })">Details</a>
+                                </td>
+                            </tr>
                         }
-                        @* Pagination ends here *@
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="mb-3">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="pagination-lg text-center">
+                                <!-- Pagination logic for Students -->
+                                @if (ViewBag.TotalStudentPages > 1)
+                                {
+                                    int maxPagesToShow = 10;
+                                    int currentPage = ViewBag.CurrentStudentPage;
+                                    int totalPages = ViewBag.TotalStudentPages;
+
+                                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                                    if (currentPage > 1)
+                                    {
+                                        @Html.ActionLink("« Previous", "Index", new { page = currentPage - 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
+                                    }
+
+                                    for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        if (i == currentPage)
+                                        {
+                                            <strong class="btn btn-danger active">@i</strong>
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink(i.ToString(), "Index", new { page = i, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
+                                        }
+                                    }
+
+                                    if (currentPage < totalPages)
+                                    {
+                                        @Html.ActionLink("Next »", "Index", new { page = currentPage + 1, bookPage = ViewBag.CurrentBookPage }, new { @class = "btn btn-dark" })
+                                    }
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-
-    <br />
-    <!-- Books Section -->
-
-    <div class="mb-3">
-        <div class="card bg-dark text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h2 class="m-0 text-danger">Books</h2>
-                    <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "books")">Create</a>
+        <!-- Right Column - Books Section -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h2 class="m-0 text-danger">Books</h2>
+                            <a class="create-link btn btn-danger" data-url="@Url.Action("Create", "books")">Create</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="table-responsive bg-dark text-white p-3 rounded">
-        <table class="table table-dark w-100">
-            <thead>
-                <tr>
-                    <th>Book Name</th>
-                    <th>Page Count</th>
-                    <th>Point</th>
-                    <th>Author Name</th>
-                    <th>Book Type</th>
-                    <th>Status</th>
-
-
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var book in Model.Books)
-                {
-                    string status = book.borrows.Any(b => !b.broughtDate.HasValue) ? "Out" : "Available";
-                    var borrowCount = book.borrows.Count(); // Get the count of borrows
-
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => book.name)</td>
-                        <td>@Html.DisplayFor(modelItem => book.pagecount)</td>
-                        <td>@Html.DisplayFor(modelItem => book.point)</td>
-                        <td>@Html.DisplayFor(modelItem => book.author.name)</td>
-                        <td>@Html.DisplayFor(modelItem => book.type.name)</td>
-                        <td>@status</td>
-                        <td>Borrow Count: @borrowCount</td> <!-- Temporary debug line -->
-                        <td>
-                            <a href="#" class="details-link btn btn-success" data-url="@Url.Action("Details", "books", new { id = book.bookId })">Details</a>
-                        </td>
-                    </tr>
-                }
-
-            </tbody>
-
-
-        </table>
-    </div>
-</div>
-<br />
-<div class="mb-3">
-    <div class="card bg-dark text-white">
-        <div class="card-body">
-            <div class="d-flex flex-column align-items-center">
-
-                <div class="pagination-lg text-center">
-                    <!-- Center the pagination links -->
-                    @if (ViewBag.TotalBookPages > 1)
-                    {
-                        int maxPagesToShow = 10; // Maximum number of pages to display at once
-                        int currentPage = ViewBag.CurrentBookPage;
-                        int totalPages = ViewBag.TotalBookPages;
-
-                        // Calculate the start and end page numbers for pagination
-                        int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
-                        int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
-                        startPage = Math.Max(1, endPage - maxPagesToShow + 1);
-
-                        // Show "Previous" button if not on the first page
-                        if (currentPage > 1)
+            <div class="table-responsive bg-dark text-white p-3 rounded">
+                <table class="table table-dark w-100">
+                    <thead>
+                        <tr>
+                            <th>Book Name</th>
+                            <th>Page Count</th>
+                            <th>Point</th>
+                            <th>Author Name</th>
+                            <th>Book Type</th>
+                            <th>Status</th>
+                      
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var book in Model.Books)
                         {
-                            @Html.ActionLink("« Previous", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage - 1 }, new { @class = "btn btn-dark" })
-                        }
+                            string status = book.borrows.Any(b => !b.broughtDate.HasValue) ? "Out" : "Available";
+                            var borrowCount = book.borrows.Count();
 
-                        // Show individual page numbers
-                        for (int i = startPage; i <= endPage; i++)
-                        {
-                            if (i == currentPage)
-                            {
-                                <strong class="btn btn-danger active">@i</strong> <!-- Current page -->
-                            }
-                            else
-                            {
-                                @Html.ActionLink(i.ToString(), "Index", new { page = ViewBag.CurrentStudentPage, bookPage = i }, new { @class = "btn btn-dark" })
-                            }
+                            <tr>
+                                <td>@Html.DisplayFor(modelItem => book.name)</td>
+                                <td>@Html.DisplayFor(modelItem => book.pagecount)</td>
+                                <td>@Html.DisplayFor(modelItem => book.point)</td>
+                                <td>@Html.DisplayFor(modelItem => book.author.name)</td>
+                                <td>@Html.DisplayFor(modelItem => book.type.name)</td>
+                                <td class="text-success">@status</td>
+                           
+                                <td>
+                                    <a href="#" class="details-link btn btn-success" data-url="@Url.Action("Details", "books", new { id = book.bookId })">Details</a>
+                                </td>
+                            </tr>
                         }
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <div class="mb-3">
+                <div class="card bg-dark text-white">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="pagination-lg text-center">
+                                <!-- Pagination logic for Books -->
+                                @if (ViewBag.TotalBookPages > 1)
+                                {
+                                    int maxPagesToShow = 10;
+                                    int currentPage = ViewBag.CurrentBookPage;
+                                    int totalPages = ViewBag.TotalBookPages;
 
-                        // Show "Next" button if not on the last page
-                        if (currentPage < totalPages)
-                        {
-                            @Html.ActionLink("Next »", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage + 1 }, new { @class = "btn btn-dark" })
-                        }
-                    }
-                    @* Pagination ends here *@
+                                    int startPage = Math.Max(1, currentPage - maxPagesToShow / 2);
+                                    int endPage = Math.Min(totalPages, startPage + maxPagesToShow - 1);
+                                    startPage = Math.Max(1, endPage - maxPagesToShow + 1);
+
+                                    if (currentPage > 1)
+                                    {
+                                        @Html.ActionLink("« Previous", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage - 1 }, new { @class = "btn btn-dark" })
+                                    }
+
+                                    for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        if (i == currentPage)
+                                        {
+                                            <strong class="btn btn-danger active">@i</strong>
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink(i.ToString(), "Index", new { page = ViewBag.CurrentStudentPage, bookPage = i }, new { @class = "btn btn-dark" })
+                                        }
+                                    }
+
+                                    if (currentPage < totalPages)
+                                    {
+                                        @Html.ActionLink("Next »", "Index", new { page = ViewBag.CurrentStudentPage, bookPage = currentPage + 1 }, new { @class = "btn btn-dark" })
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
