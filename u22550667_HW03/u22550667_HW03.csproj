@@ -190,6 +190,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\Library Management System.png" />
+    <Content Include="Images\Maintain.jpg" />
+    <Content Include="Images\pexels-mark-cruzat-1872272-3494806.jpg" />
+    <Content Include="Images\pexels-pixabay-220326.jpg" />
     <Content Include="Models\LibraryDataEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LibraryDataEntities.Context.cs</LastGenOutput>

@@ -18,7 +18,7 @@ namespace u22550667_HW03.Controllers
     public class HomeController : Controller
     {
         private LibraryEntities db = new LibraryEntities();
-        // Define the number of elements per page
+       
         // Define the number of elements per page
         int numberElementsPerPage = 10;
 
@@ -88,7 +88,7 @@ namespace u22550667_HW03.Controllers
             var borrowsQuery = db.borrows.AsQueryable();
 
             // Define the number of elements per page
-            int numberElementsPerPage = 10;
+            int numberElementsPerPage = 7;
 
             // Get the total count of authors, types, and borrows
             int totalAuthorCount = await authorsQuery.CountAsync();
@@ -191,7 +191,9 @@ namespace u22550667_HW03.Controllers
                     Frequency = group.Count() // Ensure Count() is invoked correctly
                 })
                 .OrderByDescending(x => x.Frequency)
+                .Take(10) // Take only the top 10 results
                 .ToList();
+
 
             // Get Popular Books Data
             var popularBooks = db.borrows
@@ -203,6 +205,7 @@ namespace u22550667_HW03.Controllers
                     Count = group.Count()
                 })
                 .OrderByDescending(x => x.Count)
+                 .Take(10) // Take only the top 10 results
                 .ToList();
 
             // Combine data into ViewModel

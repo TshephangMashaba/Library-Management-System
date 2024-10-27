@@ -14,13 +14,17 @@ namespace u22550667_HW03.Controllers
     public class booksController : Controller
     {
         private LibraryEntities db = new LibraryEntities();
-
         // GET: books
         public async Task<ActionResult> Index()
         {
-            var books = db.books.Include(b => b.author).Include(b => b.type);
+            var books = db.books
+                           .Include(b => b.author)
+                           .Include(b => b.type)
+                           .Include(b => b.borrows); // Include the borrows collection
+
             return View(await books.ToListAsync());
         }
+
 
         // GET: books/Details/5
         public async Task<ActionResult> Details(int? id)
