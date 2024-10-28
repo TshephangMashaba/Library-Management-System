@@ -12,30 +12,34 @@
     <title>Details</title>
 </head>
 <body>
-    <div>
-        <h4>Author Details</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-               Author Name
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.name)
-            </dd>
-            <br />
-            <dt>
-               Author Surname
-            </dt>
-    
-            <dd>
-                @Html.DisplayFor(model => model.surname)
-            </dd>
-           <br />
-        </dl>
-    </div>
-    <p>
-        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
-    </p>
+    <center>
+        <div>
+
+            <h4>Author Details</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    Author Name
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.name)
+                </dd>
+                <br />
+                <dt>
+                    Author Surname
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.surname)
+                </dd>
+                <br />
+            </dl>
+        </div>
+        <br />
+        <p>
+            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">OK</button>
+        </p>
+    </center>
 </body>
 </html>

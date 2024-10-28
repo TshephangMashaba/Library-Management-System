@@ -12,38 +12,39 @@
     <title>Delete</title>
 </head>
 <body>
-  
-    <div>
-        <h4>Are you sure you want to delete Author?</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>
-                Author Name
-            </dt>
+    <center>
+        <div>
+            <h4>Are you sure you want to delete Author?</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    Author Name
+                </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.name)
-            </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.name)
+                </dd>
+                <br />
+                <dt>
+                    Author Surname
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.surname)
+                </dd>
+
+            </dl>
             <br />
-            <dt>
-                Author Surname
-            </dt>
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
 
-            <dd>
-                @Html.DisplayFor(model => model.surname)
-            </dd>
-            <br />
-        </dl>
-
-        @using (Html.BeginForm())
-        {
-            @Html.AntiForgeryToken()
-
-            <div class="form-actions no-color">
-                <input type="submit" value="Delete" class="btn btn-danger" />
-                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
-            </div>
-        }
-    </div>
+                <div class="form-actions no-color">
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            }
+        </div>
+    </center>
 </body>
 </html>
