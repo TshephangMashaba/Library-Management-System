@@ -14,18 +14,18 @@
 <body>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/jqueryval")
-    
+    <center>
     
     @using (Html.BeginForm()) 
     {
         @Html.AntiForgeryToken()
         
         <div class="form-horizontal">
-            <h4>student</h4>
+            <h4>Create Student</h4>
             <hr />
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
-                @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <p>Name</p>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
@@ -33,7 +33,7 @@
             </div>
     
             <div class="form-group">
-                @Html.LabelFor(model => model.surname, htmlAttributes: new { @class = "control-label col-md-2" })
+              <p>Surname</p>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.surname, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.surname, "", new { @class = "text-danger" })
@@ -41,7 +41,7 @@
             </div>
     
             <div class="form-group">
-                @Html.LabelFor(model => model.birthdate, htmlAttributes: new { @class = "control-label col-md-2" })
+             <p>Birth Date</p>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.birthdate, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.birthdate, "", new { @class = "text-danger" })
@@ -49,7 +49,7 @@
             </div>
     
             <div class="form-group">
-                @Html.LabelFor(model => model.gender, htmlAttributes: new { @class = "control-label col-md-2" })
+                <p>Gender</p>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.gender, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
@@ -57,7 +57,7 @@
             </div>
     
             <div class="form-group">
-                @Html.LabelFor(model => model.@class, htmlAttributes: new { @class = "control-label col-md-2" })
+                <p>Class</p>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.@class, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.@class, "", new { @class = "text-danger" })
@@ -65,13 +65,13 @@
             </div>
     
             <div class="form-group">
-                @Html.LabelFor(model => model.point, htmlAttributes: new { @class = "control-label col-md-2" })
+               <p>Point</p>
                 <div class="col-md-10">
                     @Html.EditorFor(model => model.point, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.point, "", new { @class = "text-danger" })
                 </div>
             </div>
-    
+          <br />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Create"  class="btn btn-success" />
@@ -80,9 +80,8 @@
             </div>
         </div>
     }
+       </center>
     
-    <div>
-        @Html.ActionLink("Back to List", "Index")
-    </div>
+ 
 </body>
 </html>
